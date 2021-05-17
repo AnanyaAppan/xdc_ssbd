@@ -4,6 +4,12 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 import sys
 import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-mode', type=str, help='rgb or flow')
+parser.add_argument('-save_model', type=str)
+parser.add_argument('-root', type=str)
+
+args = parser.parse_args()
 
 import torch
 import torch.nn as nn
@@ -59,7 +65,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
     # i3d = nn.DataParallel(i3d)
 
     lr = init_lr
-    optimizer = optim.SGD(i3d.parameters(), lr=lr, momentum=0.9, weight_decay=0.0000001)
+    optimizer = optim.SGD(xdc.parameters(), lr=lr, momentum=0.9, weight_decay=0.0000001)
     lr_sched = optim.lr_scheduler.MultiStepLR(optimizer, [300, 1000])
 
 
@@ -95,7 +101,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 t = inputs.size(2)
                 labels = Variable(labels.cuda())
 
-                per_frame_logits = i3d(inputs)
+                per_frame_logits = xdc(inputs)
                 # upsample to input size
                 per_frame_logits = F.upsample(per_frame_logits, t, mode='linear')
 
@@ -126,7 +132,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                         print('{} Loc Loss: {:.4f} Cls Loss: {:.4f} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, tot_loc_loss/(10*num_steps_per_update), tot_cls_loss/(10*num_steps_per_update), tot_loss/10, total/n))
                         # save model
                         if(steps % 10000 == 0):
-                            torch.save(i3d.module.state_dict(), save_model+str(steps).zfill(6)+'.pt')
+                            torch.save(xdc.module.state_dict(), save_model+str(steps).zfill(6)+'.pt')
                         tot_loss = tot_loc_loss = tot_cls_loss = 0.
                         total = 0
                         n = 0
