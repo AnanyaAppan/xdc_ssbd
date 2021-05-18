@@ -122,7 +122,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 n += batch_size
                 # tot_cls_loss += cls_loss.data.item()
 
-                loss = F.cross_entropy(per_frame_logits,labels)/num_steps_per_update
+                loss = F.binary_cross_entropy_with_logits(per_frame_logits,labels)/num_steps_per_update
                 tot_loss += loss.data.item()
                 loss.backward()
 
