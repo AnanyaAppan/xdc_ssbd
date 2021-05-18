@@ -85,8 +85,8 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 xdc.train(False)  # Set model to evaluate mode
                 
             tot_loss = 0.0
-            tot_loc_loss = 0.0
-            tot_cls_loss = 0.0
+            # tot_loc_loss = 0.0
+            # tot_cls_loss = 0.0
             num_iter = 0
             total = 0
             n = 0
@@ -107,22 +107,22 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 print(per_frame_logits.shape)
                 print(labels.shape)
                 # upsample to input size
-                per_frame_logits = F.upsample(per_frame_logits, t, mode='linear')
+                # per_frame_logits = F.upsample(per_frame_logits, t, mode='linear')
 
                 # compute localization loss
-                loc_loss = F.binary_cross_entropy_with_logits(per_frame_logits, labels)
-                tot_loc_loss += loc_loss.data.item()
+                # loc_loss = F.binary_cross_entropy_with_logits(per_frame_logits, labels)
+                # tot_loc_loss += loc_loss.data.item()
 
                 # compute classification loss (with max-pooling along time B x C x T)
-                cls_loss = F.binary_cross_entropy_with_logits(torch.max(per_frame_logits, dim=2)[0], torch.max(labels, dim=2)[0])
+                # cls_loss = F.binary_cross_entropy_with_logits(torch.max(per_frame_logits, dim=2)[0], torch.max(labels, dim=2)[0])
                 # print(torch.max(per_frame_logits, dim=2)[0])
                 # print(torch.max(labels, dim=2)[0])
-                correct = torch.max(per_frame_logits, dim=2)[0].argmax(1).eq(torch.max(labels, dim=2)[0].argmax(1))
+                correct = per_frame_logits.eq(labels)
                 total += correct.float().sum().item() 
                 n += batch_size
-                tot_cls_loss += cls_loss.data.item()
+                # tot_cls_loss += cls_loss.data.item()
 
-                loss = (0.5*loc_loss + 0.5*cls_loss)/num_steps_per_update
+                loss = F.cross_entropy(per_frame_logits,labels)/num_steps_per_update
                 tot_loss += loss.data.item()
                 loss.backward()
 
@@ -133,15 +133,16 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                     optimizer.zero_grad()
                     lr_sched.step()
                     if steps % 10 == 0:
-                        print('{} Loc Loss: {:.4f} Cls Loss: {:.4f} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, tot_loc_loss/(10*num_steps_per_update), tot_cls_loss/(10*num_steps_per_update), tot_loss/10, total/n))
+                        print('{} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, tot_loss/10, total/n))
                         # save model
                         if(steps % 10000 == 0):
                             torch.save(xdc.module.state_dict(), save_model+str(steps).zfill(6)+'.pt')
-                        tot_loss = tot_loc_loss = tot_cls_loss = 0.
+                        # tot_loss = tot_loc_loss = tot_cls_loss = 0.
+                        tot_loss = 0
                         total = 0
                         n = 0
             if phase == 'val':
-                print('{} Loc Loss: {:.4f} Cls Loss: {:.4f} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, tot_loc_loss/num_iter, tot_cls_loss/num_iter, (tot_loss*num_steps_per_update)/num_iter, total/n))
+                print('{} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, (tot_loss*num_steps_per_update)/num_iter, total/n))
     
 
 
