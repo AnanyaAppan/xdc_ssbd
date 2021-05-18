@@ -63,6 +63,8 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
     # #i3d.load_state_dict(torch.load('/ssd/models/000920.pt'))
     # i3d.cuda()
     # i3d = nn.DataParallel(i3d)
+    xdc.cuda()
+    xdc = nn.DataParallel(xdc)
 
     lr = init_lr
     optimizer = optim.SGD(xdc.parameters(), lr=lr, momentum=0.9, weight_decay=0.0000001)
