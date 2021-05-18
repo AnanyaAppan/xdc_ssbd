@@ -117,6 +117,8 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 # cls_loss = F.binary_cross_entropy_with_logits(torch.max(per_frame_logits, dim=2)[0], torch.max(labels, dim=2)[0])
                 # print(torch.max(per_frame_logits, dim=2)[0])
                 # print(torch.max(labels, dim=2)[0])
+                print(per_frame_logits)
+                print(labels)
                 correct = per_frame_logits.eq(labels)
                 total += correct.float().sum().item() 
                 n += batch_size
