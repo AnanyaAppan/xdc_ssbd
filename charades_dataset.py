@@ -68,7 +68,7 @@ def make_dataset(split_file, split, root, mode, num_classes=3):
         data = json.load(f)
 
     i = 0
-    for vid in data.keys()[:20]:
+    for vid in data.keys():
         if data[vid]['subset'] != split:
             continue
 
@@ -91,7 +91,7 @@ def make_dataset(split_file, split, root, mode, num_classes=3):
         dataset.append((vid, label, data[vid]['duration'], num_frames))
         i += 1
     
-    return dataset
+    return dataset[:20]
 
 
 class Charades(data_utl.Dataset):
