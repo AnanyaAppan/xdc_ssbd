@@ -29,8 +29,10 @@ def load_rgb_frames(image_dir, vid, start, num):
   frames = []
   for i in range(start, start+num):
     # img = cv2.imread(os.path.join(image_dir, vid, 'image_'+str(i).zfill(5)+'.jpg'))[:, :, [2, 1, 0]]
-    print(os.path.join(image_dir, vid, str(i)+'.png'))
-    img = cv2.imread(os.path.join(image_dir, vid, str(i)+'.png'))[:, :, [2, 1, 0]]
+    try:
+        img = cv2.imread(os.path.join(image_dir, vid, str(i)+'.png'))[:, :, [2, 1, 0]]
+    except:
+        print(os.path.join(image_dir, vid, str(i)+'.png'))
     w,h,c = img.shape
     if w < 226 or h < 226:
         d = 226.-min(w,h)
