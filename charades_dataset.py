@@ -68,7 +68,7 @@ def make_dataset(split_file, split, root, mode, num_classes=3):
         data = json.load(f)
 
     i = 0
-    for vid in data.keys():
+    for vid in data.keys()[:20]:
         if data[vid]['subset'] != split:
             continue
 
