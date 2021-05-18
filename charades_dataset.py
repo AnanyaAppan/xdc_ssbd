@@ -59,7 +59,7 @@ def load_flow_frames(image_dir, vid, start, num):
   return np.asarray(frames, dtype=np.float32)
 
 
-def make_dataset(split_file, split, root, mode, num_classes=8):
+def make_dataset(split_file, split, root, mode, num_classes=3):
     dataset = []
     with open(split_file, 'r') as f:
         data = json.load(f)
@@ -78,13 +78,13 @@ def make_dataset(split_file, split, root, mode, num_classes=8):
         if num_frames < 34:
             continue
 
-        label = np.zeros((num_classes,num_frames), np.float32)
+        label = np.zeros(num_classes, np.float32)
 
         fps = num_frames/data[vid]['duration']
         for ann in data[vid]['actions']:
-            for fr in range(0,num_frames,1):
-                if fr/fps > ann[1] and fr/fps < ann[2]:
-                    label[ann[0], fr] = 1 # binary classification
+            # for fr in range(0,num_frames,1):
+            if fr/fps > ann[1] and fr/fps < ann[2]:
+                label[ann[0], fr] = 1 # binary classification
         dataset.append((vid, label, data[vid]['duration'], num_frames))
         i += 1
     
