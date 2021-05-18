@@ -104,8 +104,8 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 labels = Variable(labels.cuda())
 
                 per_frame_logits = xdc(inputs)
-                print(per_frame_logits.shape)
-                print(labels.shape)
+                # print(per_frame_logits.shape)
+                # print(labels.shape)
                 # upsample to input size
                 # per_frame_logits = F.upsample(per_frame_logits, t, mode='linear')
 
