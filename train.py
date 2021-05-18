@@ -43,6 +43,8 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
 
     dataloaders = {'train': dataloader, 'val': val_dataloader}
     datasets = {'train': dataset,'val': val_dataset }
+    print(len(dataloader))
+    print(len(val_dataloader))
 
     # dataloaders = {'train': dataloader}
     # datasets = {'train': dataset}
