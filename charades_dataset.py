@@ -116,7 +116,7 @@ class Charades(data_utl.Dataset):
             imgs = load_rgb_frames(self.root, vid, start_f, 32)
         else:
             imgs = load_flow_frames(self.root, vid, start_f, 32)
-        label = label[:, start_f:start_f+32]
+        # label = label[:, start_f:start_f+32]
 
         imgs = self.transforms(imgs)
         # print(imgs.shape)
