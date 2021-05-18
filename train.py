@@ -124,7 +124,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
 
                 loss = F.binary_cross_entropy_with_logits(per_frame_logits,labels)/num_steps_per_update
                 tot_loss += loss.data.item()
-                loss.backward()
+                # loss.backward()
 
                 if num_iter == num_steps_per_update and phase == 'train':
                     steps += 1

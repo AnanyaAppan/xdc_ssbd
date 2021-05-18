@@ -91,7 +91,7 @@ def make_dataset(split_file, split, root, mode, num_classes=3):
         dataset.append((vid, label, data[vid]['duration'], num_frames))
         i += 1
     
-    return dataset[:20]
+    return dataset
 
 
 class Charades(data_utl.Dataset):
