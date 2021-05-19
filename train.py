@@ -64,7 +64,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
     # i3d.cuda()
     # i3d = nn.DataParallel(i3d)
     xdc.cuda()
-    # xdc = nn.DataParallel(xdc)
+    xdc = nn.DistributedDataParallel(xdc,device_ids=[0])
 
     # for name, param in xdc.named_parameters():
     #     if 'fc' not in name:
