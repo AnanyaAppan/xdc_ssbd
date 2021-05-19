@@ -79,19 +79,18 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
     num_steps_per_update = 4 # accum gradient
     steps = 0
     best_val = 0
-    new_flag = 0
+    # new_flag = 0
     # train it
     while steps < max_steps:#for epoch in range(num_epochs):
         print('Step {}/{}'.format(steps, max_steps))
         print('-' * 10)
-        if(new_flag==1):
-            new_state_dict = OrderedDict()
-            state_dict = torch.load(save_model+'.pt')
-            for k, v in state_dict.items():
-                name = "module."+k # add module.
-                new_state_dict[name] = v
-            xdc.load_state_dict(new_state_dict)
-            new_flag = 0
+        new_state_dict = OrderedDict()
+        state_dict = torch.load(save_model+'.pt')
+        for k, v in state_dict.items():
+            name = "module."+k # add module.
+            new_state_dict[name] = v
+        xdc.load_state_dict(new_state_dict)
+        # new_flag = 0
         # Each epoch has a training and validation phase
         for phase in ['train','val']:
             if phase == 'train':
@@ -161,7 +160,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                 if(total/n > best_val):
                     best_val = total/n
                     torch.save(xdc.module.state_dict(), save_model+'.pt')
-                    new_flag = 1
+                    # new_flag = 1
 
     
 
