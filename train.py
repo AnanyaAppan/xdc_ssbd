@@ -64,11 +64,11 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
     # i3d.cuda()
     # i3d = nn.DataParallel(i3d)
     xdc.cuda()
-    xdc = nn.DataParallel(xdc)
+    # xdc = nn.DataParallel(xdc)
 
-    for name, param in xdc.named_parameters():
-        if 'fc' not in name:
-            param.requires_grad = False
+    # for name, param in xdc.named_parameters():
+    #     if 'fc' not in name:
+    #         param.requires_grad = False
 
     lr = init_lr
     optimizer = optim.SGD(xdc.parameters(), lr=lr, momentum=0.9, weight_decay=0.0000001)
