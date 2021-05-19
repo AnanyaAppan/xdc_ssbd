@@ -28,7 +28,7 @@ import numpy as np
 from charades_dataset import Charades as Dataset
 
 
-def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segment/data/', train_split='../../SSBD/Annotations/annotations_charades.json', batch_size=4, save_model=''):
+def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segment/data/', train_split='../../SSBD/Annotations/annotations_charades.json', batch_size=1, save_model=''):
     # setup dataset
     train_transforms = transforms.Compose([videotransforms.RandomCrop(224),
                                            videotransforms.RandomHorizontalFlip(),
