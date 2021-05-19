@@ -90,7 +90,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
             for k, v in state_dict.items():
                 name = "module."+name # add module.
                 new_state_dict[name] = v
-            xdc.load_state_dict(state_dict)
+            xdc.load_state_dict(new_state_dict)
             new_flag = 0
         # Each epoch has a training and validation phase
         for phase in ['train','val']:
