@@ -21,6 +21,7 @@ from torch.autograd import Variable
 import torchvision
 from torchvision import datasets, transforms
 import videotransforms
+from collections import OrderedDict
 
 
 import numpy as np
@@ -84,7 +85,12 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
         print('Step {}/{}'.format(steps, max_steps))
         print('-' * 10)
         if(new_flag==1):
-            xdc.load_state_dict(torch.load(save_model+'.pt'))
+            new_state_dict = OrderedDict()
+            state_dict = torch.load(save_model+'.pt')
+            for k, v in state_dict.items():
+                name = k[7:] # remove module.
+                new_state_dict[name] = v
+            xdc.load_state_dict(new_state_dict)
             new_flag = 0
         # Each epoch has a training and validation phase
         for phase in ['train','val']:
