@@ -88,7 +88,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
             new_state_dict = OrderedDict()
             state_dict = torch.load(save_model+'.pt')
             for k, v in state_dict.items():
-                name = "module."+name # add module.
+                name = "module."+k # add module.
                 new_state_dict[name] = v
             xdc.load_state_dict(new_state_dict)
             new_flag = 0
