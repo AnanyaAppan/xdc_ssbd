@@ -77,10 +77,15 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
 
     num_steps_per_update = 4 # accum gradient
     steps = 0
+    best_val = 0
+    new_flag = 0
     # train it
     while steps < max_steps:#for epoch in range(num_epochs):
         print('Step {}/{}'.format(steps, max_steps))
         print('-' * 10)
+        if(new_flag==1):
+            xdc.load_state_dict(torch.load(save_model+'.pt'))
+            new_flag = 0
         # Each epoch has a training and validation phase
         for phase in ['train','val']:
             if phase == 'train':
@@ -139,14 +144,19 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
                     if steps % 10 == 0:
                         print('{} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, tot_loss/10, total/n))
                         # save model
-                        if(steps % 10000 == 0):
-                            torch.save(xdc.module.state_dict(), save_model+str(steps).zfill(6)+'.pt')
+                        # if(steps % 10000 == 0):
+                            # torch.save(xdc.module.state_dict(), save_model+str(steps).zfill(6)+'.pt')
                         # tot_loss = tot_loc_loss = tot_cls_loss = 0.
                         tot_loss = 0
                         total = 0
                         n = 0
             if phase == 'val':
                 print('{} Tot Loss: {:.4f} Accuracy: {:.4f}'.format(phase, (tot_loss*num_steps_per_update)/num_iter, total/n))
+                if(total/n > best_val):
+                    best_val = total/n
+                    torch.save(xdc.module.state_dict(), save_model+'.pt')
+                    new_flag = 1
+
     
 
 
