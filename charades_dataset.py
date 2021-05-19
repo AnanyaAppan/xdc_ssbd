@@ -113,6 +113,8 @@ class Charades(data_utl.Dataset):
             tuple: (image, target) where target is class_index of the target class.
         """
         vid, label, dur, nf = self.data[index]
+        if(vid == "v_Spinning_10"): nf = 106
+        if(vid == "v_ArmFlapping_24"): nf = 104
         start_f = random.randint(1,nf-33)
 
         if self.mode == 'rgb':
