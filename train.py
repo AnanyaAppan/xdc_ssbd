@@ -68,7 +68,7 @@ def run(init_lr=0.1, max_steps=64e3, mode='rgb', root='../../SSBD/ssbd_clip_segm
     xdc = nn.DataParallel(xdc).cuda()
 
     for name, param in xdc.named_parameters():
-        if 'fc' not in name:
+        if 'fc' not in name or '4.1' not in name:
             param.requires_grad = False
 
     lr = init_lr
